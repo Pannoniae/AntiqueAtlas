@@ -1,5 +1,6 @@
 package hunternif.mc.atlas.client.gui.core;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -163,15 +164,15 @@ public abstract class AGuiScrollbar extends GuiComponent {
 			doSetScrollRatio((float) (getMousePos(mouseX, mouseY) - anchorSize / 2)
 					/ (float) (getScrollbarLength() - anchorSize));
 		}
-		
-		GlStateManager.enableTexture();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color4f(1, 1, 1, 1);
+
+		RenderSystem.enableTexture();
+		RenderSystem.enableBlend();
+		RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		RenderSystem.color4f(1, 1, 1, 1);
 		
 		drawAnchor();
-		
-		GlStateManager.disableBlend();
+
+		RenderSystem.disableBlend();
 	}
 	
 	private void updateAnchorSize() {

@@ -1,6 +1,7 @@
 package hunternif.mc.atlas.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hunternif.mc.atlas.client.Textures;
 import hunternif.mc.atlas.client.gui.core.GuiComponentButton;
 import hunternif.mc.atlas.util.AtlasRenderHelper;
@@ -44,18 +45,18 @@ public class GuiArrowButton extends GuiComponentButton {
 	@Override
 	public void render(int mouseX, int mouseY, float partialTick) {
 		//GuiLighting.disable();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		RenderSystem.enableBlend();
+		RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		
 		int x = getGuiX(), y = getGuiY();
 		if (isMouseOver) {
-			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		} else {
 			// Fade out when the mouse is far from them:
 			int distanceSq = (mouseX - x - getWidth()/2)*(mouseX - x - getWidth()/2) +
 					(mouseY - y - getHeight()/2)*(mouseY - y - getHeight()/2);
 			double alpha = distanceSq < 400 ? 0.5 : Math.pow(distanceSq, -0.28);
-			GlStateManager.color4f(1, 1, 1, (float)alpha);
+			RenderSystem.color4f(1, 1, 1, (float)alpha);
 		}
 		
 		int u = 0, v = 0;
@@ -66,7 +67,7 @@ public class GuiArrowButton extends GuiComponentButton {
 		case DOWN: u = 12; v = 12; break;
 		}
 		AtlasRenderHelper.drawTexturedRect(Textures.BTN_ARROWS, x, y, u, v, WIDTH, HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
-		
-		GlStateManager.disableBlend();
+
+		RenderSystem.disableBlend();
 	}
 }

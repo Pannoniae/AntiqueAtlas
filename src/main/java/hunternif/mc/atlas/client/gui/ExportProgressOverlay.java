@@ -1,6 +1,7 @@
 package hunternif.mc.atlas.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hunternif.mc.atlas.util.ExportImageUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -27,14 +28,14 @@ public enum ExportProgressOverlay {
         FontRenderer font = Minecraft.getInstance().fontRenderer;
         int s = 2;
 
-        GlStateManager.scaled(1.0 / s, 1.0 / s, 1);
+        RenderSystem.scaled(1.0 / s, 1.0 / s, 1);
 
         int headerWidth = font.getStringWidth(l.header);
         font.drawString(l.header, (x) * s - headerWidth / 2, (y) * s - 14, 0xffffff);
         int statusWidth = font.getStringWidth(l.status);
         font.drawString(l.status, (x) * s - statusWidth / 2, (y) * s, 0xffffff);
 
-        GlStateManager.scaled(s, s, 1);
+        RenderSystem.scaled(s, s, 1);
         y += 7;
 
         x -= barWidth / 2;
@@ -42,7 +43,7 @@ public enum ExportProgressOverlay {
         if (l.maxProgress < 0)
             p = 0;
 
-        GlStateManager.disableTexture();
+        RenderSystem.disableTexture();
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vb = tessellator.getBuffer();
@@ -61,6 +62,6 @@ public enum ExportProgressOverlay {
 
         tessellator.draw();
 
-        GlStateManager.enableTexture();
+        RenderSystem.enableTexture();
     }
 }

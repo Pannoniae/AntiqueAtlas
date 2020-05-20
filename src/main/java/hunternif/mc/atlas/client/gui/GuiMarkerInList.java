@@ -1,6 +1,7 @@
 package hunternif.mc.atlas.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hunternif.mc.atlas.client.Textures;
 import hunternif.mc.atlas.client.gui.core.GuiToggleButton;
 import hunternif.mc.atlas.registry.MarkerType;
@@ -24,7 +25,7 @@ public class GuiMarkerInList extends GuiToggleButton {
 	
 	@Override
 	public void render(int mouseX, int mouseY, float partialTick) {
-		GlStateManager.color4f(1, 1, 1, 1);
+		RenderSystem.color4f(1, 1, 1, 1);
 		AtlasRenderHelper.drawFullTexture(
 				isSelected() ? Textures.MARKER_FRAME_ON : Textures.MARKER_FRAME_OFF,
 				getGuiX(), getGuiY(), FRAME_SIZE, FRAME_SIZE);

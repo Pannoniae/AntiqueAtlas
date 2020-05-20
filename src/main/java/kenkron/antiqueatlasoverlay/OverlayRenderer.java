@@ -1,6 +1,7 @@
 package kenkron.antiqueatlasoverlay;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hunternif.mc.atlas.AntiqueAtlasMod;
 import hunternif.mc.atlas.RegistrarAntiqueAtlas;
 import hunternif.mc.atlas.SettingsConfig;
@@ -103,9 +104,9 @@ public class OverlayRenderer
 
     private static void drawMinimap(Rect shape, int atlasID, Vec3d position, float rotation,
                              DimensionType dimension) {
-        GlStateManager.color4f(1, 1, 1, 1);
-        GlStateManager.enableBlend();
-        GlStateManager.alphaFunc(GL11.GL_GREATER, 0); // So light detail on tiles is
+        RenderSystem.color4f(1, 1, 1, 1);
+        RenderSystem.enableBlend();
+        RenderSystem.alphaFunc(GL11.GL_GREATER, 0); // So light detail on tiles is
         // visible
         AtlasRenderHelper.drawFullTexture(Textures.BOOK, shape.minX,
                 shape.minY, shape.getWidth(), shape.getHeight());
@@ -125,10 +126,10 @@ public class OverlayRenderer
         }
 
         // Overlay the frame so that edges of the map are smooth:
-        GlStateManager.color4f(1, 1, 1, 1);
+        RenderSystem.color4f(1, 1, 1, 1);
         AtlasRenderHelper.drawFullTexture(Textures.BOOK_FRAME, shape.minX,
                 shape.minY, shape.getWidth(), shape.getHeight());
-        GlStateManager.disableBlend();
+        RenderSystem.disableBlend();
     }
 
     private static void drawTiles(Rect shape, int atlasID, Vec3d position,
@@ -138,8 +139,8 @@ public class OverlayRenderer
         // the display window does not. We need to fix this
         glScissorGUI(shape);
 
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         DimensionData biomeData = AntiqueAtlasMod.atlasData.getAtlasData(
                 atlasID, Minecraft.getInstance().world).getDimensionData(dimension);
@@ -182,7 +183,7 @@ public class OverlayRenderer
         renderer.draw();
         // get GL back to normal
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
-        GlStateManager.color4f(1, 1, 1, 1);
+        RenderSystem.color4f(1, 1, 1, 1);
     }
 
     private static void drawMarkers(Rect shape, int atlasID, Vec3d position,
@@ -213,19 +214,19 @@ public class OverlayRenderer
 
         // get GL back to normal
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
-        GlStateManager.color4f(1, 1, 1, 1);
+        RenderSystem.color4f(1, 1, 1, 1);
     }
 
     private static void drawPlayer(float x, float y, float rotation) {
         // Draw player icon:
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translatef(x, y, 0);
-        GlStateManager.rotatef(180 + rotation, 0, 0, 1);
-        GlStateManager.translatef(-AAOConfig.appearance.playerIconWidth / 2, -AAOConfig.appearance.playerIconHeight / 2, 0);
+        RenderSystem.pushMatrix();
+        RenderSystem.translatef(x, y, 0);
+        RenderSystem.rotatef(180 + rotation, 0, 0, 1);
+        RenderSystem.translatef(-AAOConfig.appearance.playerIconWidth / 2, -AAOConfig.appearance.playerIconHeight / 2, 0);
         AtlasRenderHelper.drawFullTexture(Textures.PLAYER, 0, 0, AAOConfig.appearance.playerIconWidth, AAOConfig.appearance.playerIconHeight);
-        GlStateManager.popMatrix();
-        GlStateManager.color4f(1, 1, 1, 1);
+        RenderSystem.popMatrix();
+        RenderSystem.color4f(1, 1, 1, 1);
     }
 
     private static void drawMarkersData(DimensionMarkersData markersData,
@@ -273,7 +274,7 @@ public class OverlayRenderer
                 && !biomeData.hasTileAt(marker.getChunkX(), marker.getChunkZ())) {
             return;
         }
-        GlStateManager.color4f(1, 1, 1, 1);
+        RenderSystem.color4f(1, 1, 1, 1);
         MarkerType m = MarkerRegistry.find(marker.getType());
         if (m == null){
         	AntiqueAtlasOverlayMod.LOGGER.warn("Could not find marker type for {}", marker.getId());

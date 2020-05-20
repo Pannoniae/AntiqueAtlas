@@ -1,6 +1,7 @@
 package hunternif.mc.atlas.client.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hunternif.mc.atlas.client.Textures;
 import hunternif.mc.atlas.client.gui.core.GuiToggleButton;
 import hunternif.mc.atlas.util.AtlasRenderHelper;
@@ -52,7 +53,7 @@ public class GuiBookmarkButton extends GuiToggleButton {
 
 	@Override
 	public void render(int mouseX, int mouseY, float partialTick) {
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		//GuiLighting.disable();
 
 		// Render background:
