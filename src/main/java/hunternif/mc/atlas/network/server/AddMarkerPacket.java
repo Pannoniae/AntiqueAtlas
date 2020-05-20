@@ -65,7 +65,7 @@ public class AddMarkerPacket {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity player = ctx.get().getSender();
             // Make sure it's this player's atlas :^)
-            if (SettingsConfig.gameplay.itemNeeded && !AtlasAPI.getPlayerAtlases(player).contains(atlasID)) {
+            if (SettingsConfig.itemNeeded && !AtlasAPI.getPlayerAtlases(player).contains(atlasID)) {
                 Log.warn("Player %s attempted to put marker into someone else's Atlas #%d",
                         player.getCommandSource().getName(), atlasID);
                 return;

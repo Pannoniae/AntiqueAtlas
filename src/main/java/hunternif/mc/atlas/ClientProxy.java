@@ -17,8 +17,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
-import net.minecraftforge.resource.ReloadRequirements;
-import net.minecraftforge.resource.SelectiveReloadStateHandler;
 
 import java.io.File;
 import java.util.function.Predicate;
@@ -83,7 +81,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
 			type.initMips();
 		}
 
-		if (!SettingsConfig.gameplay.itemNeeded) {
+		if (!SettingsConfig.itemNeeded) {
 			KeyHandler.registerBindings();
 			//ClientTickCallback.EVENT.register(KeyHandler::onClientTick);
 		}
@@ -106,7 +104,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
 	private GuiAtlas getAtlasGUI() {
 		if (guiAtlas == null) {
 			guiAtlas = new GuiAtlas();
-			guiAtlas.setMapScale(SettingsConfig.userInterface.defaultScale);
+			guiAtlas.setMapScale(SettingsConfig.defaultScale);
 		}
 		return guiAtlas;
 	}

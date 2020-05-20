@@ -59,8 +59,8 @@ public class AtlasData extends WorldSavedData {
 	public AtlasData(String key) {
 		super(key);
 
-		biomeDetectorOverworld.setScanPonds(SettingsConfig.performance.doScanPonds);
-		biomeDetectorOverworld.setScanRavines(SettingsConfig.performance.doScanRavines);
+		biomeDetectorOverworld.setScanPonds(SettingsConfig.doScanPonds);
+		biomeDetectorOverworld.setScanRavines(SettingsConfig.doScanRavines);
 		setBiomeDetectorForDimension(DimensionType.OVERWORLD, biomeDetectorOverworld);
 		setBiomeDetectorForDimension(DimensionType.THE_NETHER, biomeDetectorNether);
 		setBiomeDetectorForDimension(DimensionType.THE_END, biomeDetectorEnd);
@@ -168,11 +168,11 @@ public class AtlasData extends WorldSavedData {
 
 	/**Updates map data around player
 	 *
-	 * @return A set of the new tiles, mostly so the server can synch those with relavent clients.*/
+	 * @return A set of the new tiles, mostly so the server can synch those with relevant clients.*/
 	public Collection<TileInfo> updateMapAroundPlayer(PlayerEntity player) {
 		// Update the actual map only so often:
-		int newScanInterval = Math.round(SettingsConfig.performance.newScanInterval * 20);
-		int rescanInterval = newScanInterval * SettingsConfig.performance.rescanRate;
+		int newScanInterval = (int) Math.round(SettingsConfig.newScanInterval * 20);
+		int rescanInterval = newScanInterval * SettingsConfig.rescanRate;
 
 		if (player.getEntityWorld().getGameTime() % newScanInterval != 0) {
 			return Collections.emptyList(); //no new tiles
@@ -184,9 +184,9 @@ public class AtlasData extends WorldSavedData {
 		int playerZ = MathHelper.floor(player.getPosZ()) >> 4;
 		ITileStorage seenChunks = this.getDimensionData(player.dimension);
 		IBiomeDetector biomeDetector = getBiomeDetectorForDimension(player.dimension);
-		int scanRadius = SettingsConfig.performance.scanRadius;
+		int scanRadius = SettingsConfig.scanRadius;
 
-		final boolean rescanRequired = SettingsConfig.performance.doRescan && player.getEntityWorld().getGameTime() % rescanInterval == 0;
+		final boolean rescanRequired = SettingsConfig.doRescan && player.getEntityWorld().getGameTime() % rescanInterval == 0;
 		int scanRadiusSq = scanRadius*scanRadius;
 
 		// Look at chunks around in a circular area:
@@ -216,7 +216,7 @@ public class AtlasData extends WorldSavedData {
 					}
 
 					// TODO FABRIC: forceChunkLoading crashes here
-					IChunk chunk = player.getEntityWorld().getChunk(x, z, ChunkStatus.FULL, SettingsConfig.performance.forceChunkLoading);
+					IChunk chunk = player.getEntityWorld().getChunk(x, z, ChunkStatus.FULL, SettingsConfig.forceChunkLoading);
 
 					// Skip chunk if it hasn't loaded yet:
 					if (chunk == null) {

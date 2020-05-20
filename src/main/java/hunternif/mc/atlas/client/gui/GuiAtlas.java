@@ -328,7 +328,7 @@ public class GuiAtlas extends GuiComponent {
         };
         addChild(btnExportPng).offsetGuiCoords(300, 75);
         btnExportPng.addListener(button -> {
-            if (stack != null || !SettingsConfig.gameplay.itemNeeded) {
+            if (stack != null || !SettingsConfig.itemNeeded) {
                 exportThread = new Thread(() -> exportImage(getAtlasID()), "Atlas file export thread");
                 exportThread.start();
             }
@@ -340,7 +340,7 @@ public class GuiAtlas extends GuiComponent {
             if (state.is(PLACING_MARKER)) {
                 selectedButton = null;
                 state.switchTo(NORMAL);
-            } else if (stack != null || !SettingsConfig.gameplay.itemNeeded) {
+            } else if (stack != null || !SettingsConfig.itemNeeded) {
                 selectedButton = button;
                 state.switchTo(PLACING_MARKER);
 
@@ -374,7 +374,7 @@ public class GuiAtlas extends GuiComponent {
             if (state.is(DELETING_MARKER)) {
                 selectedButton = null;
                 state.switchTo(NORMAL);
-            } else if (stack != null || !SettingsConfig.gameplay.itemNeeded) {
+            } else if (stack != null || !SettingsConfig.itemNeeded) {
                 selectedButton = button;
                 state.switchTo(DELETING_MARKER);
             }
@@ -385,7 +385,7 @@ public class GuiAtlas extends GuiComponent {
             selectedButton = null;
             if (state.is(HIDING_MARKERS)) {
                 state.switchTo(NORMAL);
-            } else if (stack != null || !SettingsConfig.gameplay.itemNeeded) {
+            } else if (stack != null || !SettingsConfig.itemNeeded) {
                 selectedButton = null;
                 state.switchTo(HIDING_MARKERS);
             }
@@ -409,7 +409,7 @@ public class GuiAtlas extends GuiComponent {
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             this.player = Minecraft.getInstance().player;
             updateAtlasData();
-            if (!followPlayer && SettingsConfig.gameplay.doSaveBrowsingPos) {
+            if (!followPlayer && SettingsConfig.doSaveBrowsingPos) {
                 loadSavedBrowsingPosition();
             }
         });
@@ -583,7 +583,7 @@ public class GuiAtlas extends GuiComponent {
 
         if (!handled && wheelMove != 0) {
             wheelMove = wheelMove > 0 ? 1 : -1;
-            if (SettingsConfig.userInterface.doReverseWheelZoom) {
+            if (SettingsConfig.doReverseWheelZoom) {
                 wheelMove *= -1;
             }
 
@@ -709,7 +709,7 @@ public class GuiAtlas extends GuiComponent {
      */
     private void setMapScale(double scale, int addOffsetX, int addOffsetY) {
         double oldScale = mapScale;
-        mapScale = Math.min(Math.max(scale, SettingsConfig.userInterface.minScale), SettingsConfig.userInterface.maxScale);
+        mapScale = Math.min(Math.max(scale, SettingsConfig.minScale), SettingsConfig.maxScale);
 
         // Scaling not needed
         if (oldScale == mapScale) {
@@ -744,7 +744,7 @@ public class GuiAtlas extends GuiComponent {
         long deltaMillis = currentMillis - lastUpdateMillis;
         lastUpdateMillis = currentMillis;
 
-        if (SettingsConfig.performance.debugRender) {
+        if (SettingsConfig.debugRender) {
             renderTimes[renderTimesIndex++] = System.currentTimeMillis();
             if (renderTimesIndex == renderTimes.length) {
                 renderTimesIndex = 0;
@@ -762,7 +762,7 @@ public class GuiAtlas extends GuiComponent {
         RenderSystem.alphaFunc(GL11.GL_GREATER, 0); // So light detail on tiles is visible
         AtlasRenderHelper.drawFullTexture(Textures.BOOK, getGuiX(), getGuiY(), WIDTH, HEIGHT);
 
-        if ((stack == null && SettingsConfig.gameplay.itemNeeded) || biomeData == null)
+        if ((stack == null && SettingsConfig.itemNeeded) || biomeData == null)
             return;
 
         if (state.is(DELETING_MARKER)) {
@@ -990,7 +990,7 @@ public class GuiAtlas extends GuiComponent {
             RenderSystem.color4f(1, 1, 1, 1);
         }
 
-        if (SettingsConfig.performance.debugRender) {
+        if (SettingsConfig.debugRender) {
             System.out.println("Rendering Marker: " + info.tex);
         }
 
@@ -1062,13 +1062,13 @@ public class GuiAtlas extends GuiComponent {
      * Returns the scale of markers and player icon at given mapScale.
      */
     private double getIconScale() {
-        return SettingsConfig.userInterface.doScaleMarkers ? (mapScale < 0.5 ? 0.5 : mapScale > 1 ? 2 : 1) : 1;
+        return SettingsConfig.doScaleMarkers ? (mapScale < 0.5 ? 0.5 : mapScale > 1 ? 2 : 1) : 1;
     }
 
     /**
      * Returns atlas id based on "itemNeeded" option
      */
     private int getAtlasID() {
-        return SettingsConfig.gameplay.itemNeeded ? ((ItemAtlas) stack.getItem()).getAtlasID(stack) : player.getUniqueID().hashCode();
+        return SettingsConfig.itemNeeded ? ((ItemAtlas) stack.getItem()).getAtlasID(stack) : player.getUniqueID().hashCode();
     }
 }

@@ -87,7 +87,7 @@ public class NetherPortalWatcher {
 	/** Put the Portal marker at the player's current coordinates into all
 	 * atlases that he is carrying, if the same marker is not already there. */
 	private void addPortalMarkerIfNone(PlayerEntity player, DimensionType dimension) {
-		if (!SettingsConfig.gameplay.autoNetherPortalMarkers || player.getEntityWorld().isRemote) {
+		if (!SettingsConfig.autoNetherPortalMarkers || player.getEntityWorld().isRemote) {
 			return;
 		}
 
@@ -95,7 +95,7 @@ public class NetherPortalWatcher {
 		// We need the very specific dimension each time.
 		World world = ((ServerWorld) player.getEntityWorld()).getServer().getWorld(dimension);
 
-		if (!SettingsConfig.gameplay.itemNeeded) {
+		if (!SettingsConfig.itemNeeded) {
 			addPortalMarkerIfNone(player, world, dimension, player.getUniqueID().hashCode());
 			return;
 		}

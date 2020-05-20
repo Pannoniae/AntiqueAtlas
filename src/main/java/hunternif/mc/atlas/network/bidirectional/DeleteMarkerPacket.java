@@ -66,7 +66,7 @@ public class DeleteMarkerPacket {
             // do stuff
             if (side == Dist.DEDICATED_SERVER) {
                 // Make sure it's this player's atlas :^)
-                if (SettingsConfig.gameplay.itemNeeded && !AtlasAPI.getPlayerAtlases(player).contains(atlasID)) {
+                if (SettingsConfig.itemNeeded && !AtlasAPI.getPlayerAtlases(player).contains(atlasID)) {
                     Log.warn("Player %s attempted to delete marker from someone else's Atlas #%d",
                             player.getCommandSource().getName(), atlasID);
                     return;

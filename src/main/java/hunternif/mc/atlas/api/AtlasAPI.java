@@ -47,7 +47,7 @@ public class AtlasAPI {
 	/** Convenience method that returns a list of atlas IDs for all atlas items
 	 * the player is currently carrying. **/
 	public static List<Integer> getPlayerAtlases(PlayerEntity player) {
-		if (!SettingsConfig.gameplay.itemNeeded) {
+		if (!SettingsConfig.itemNeeded) {
 			return Collections.singletonList(player.getUniqueID().hashCode());
 		}
 

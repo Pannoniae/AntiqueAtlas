@@ -11,7 +11,7 @@ import net.minecraft.util.text.StringTextComponent;
  */
 public class DeathWatcher {
 	public static void onPlayerDeath(PlayerEntity player) {
-		if (SettingsConfig.gameplay.autoDeathMarker) {
+		if (SettingsConfig.autoDeathMarker) {
 			for (int atlasID : AtlasAPI.getPlayerAtlases(player)) {
 				AtlasAPI.markers.putMarker(player.getEntityWorld(), true, atlasID, "antiqueatlas:tomb",
 						new StringTextComponent("gui.antiqueatlas.marker.tomb").appendSibling(player.getName()).getString(),

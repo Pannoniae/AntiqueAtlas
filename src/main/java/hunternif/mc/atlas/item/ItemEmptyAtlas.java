@@ -32,9 +32,9 @@ public class ItemEmptyAtlas extends Item {
 
 		AtlasData atlasData = AntiqueAtlasMod.atlasData.getAtlasData(atlasID, world);
 		atlasData.getDimensionData(player.dimension).setBrowsingPosition(
-				(int)Math.round(-player.getPosX() * SettingsConfig.userInterface.defaultScale),
-				(int)Math.round(-player.getPosZ() * SettingsConfig.userInterface.defaultScale),
-				SettingsConfig.userInterface.defaultScale);
+				(int)Math.round(-player.getPosX() * SettingsConfig.defaultScale),
+				(int)Math.round(-player.getPosZ() * SettingsConfig.defaultScale),
+				SettingsConfig.defaultScale);
 		atlasData.markDirty();
 
 		MarkersData markersData = AntiqueAtlasMod.markersData.getMarkersData(atlasID, world);

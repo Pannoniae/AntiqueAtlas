@@ -57,7 +57,7 @@ public class PutTilePacket {
             ServerPlayerEntity player = ctx.get().getSender();
             if (side == Dist.DEDICATED_SERVER) {
                 // Make sure it's this player's atlas :^)
-                if (SettingsConfig.gameplay.itemNeeded && !AtlasAPI.getPlayerAtlases(player).contains(atlasID)) {
+                if (SettingsConfig.itemNeeded && !AtlasAPI.getPlayerAtlases(player).contains(atlasID)) {
                     Log.warn("Player %s attempted to modify someone else's Atlas #%d",
                             player.getCommandSource().getName(), atlasID);
                     return;

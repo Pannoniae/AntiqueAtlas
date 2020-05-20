@@ -47,7 +47,7 @@ public class MapDataPacket {
             AtlasData atlasData = AntiqueAtlasMod.atlasData.getAtlasData(atlasID, Minecraft.getInstance().player.getEntityWorld());
             atlasData.read(data);
             // GuiAtlas may already be opened at (0, 0) browsing position, force load saved position:
-            if (SettingsConfig.gameplay.doSaveBrowsingPos &&
+            if (SettingsConfig.doSaveBrowsingPos &&
                     Minecraft.getInstance().currentScreen instanceof GuiAtlas) {
                 ((GuiAtlas) Minecraft.getInstance().currentScreen).loadSavedBrowsingPosition();
             }

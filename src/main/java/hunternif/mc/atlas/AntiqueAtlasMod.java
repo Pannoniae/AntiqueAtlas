@@ -36,8 +36,11 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -71,6 +74,9 @@ public class AntiqueAtlasMod {
     //public static final RecipeCraftedHandler craftedHandler = new RecipeCraftedHandler();
 
     public AntiqueAtlasMod() {
+        proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, SettingsConfig.CLIENT_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SettingsConfig.COMMON_SPEC);
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         // Register the enqueueIMC method for modloading
@@ -79,24 +85,36 @@ public class AntiqueAtlasMod {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModConfigEvent);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    @SubscribeEvent
+    public void onModConfigEvent(ModConfig.ModConfigEvent event) {
+        AntiqueAtlasMod.logger.info("Got config event");
+        if (event.getConfig().getSpec() == SettingsConfig.CLIENT_SPEC) {
+            SettingsConfig.bakeConfigClient();
+        }
+        if (event.getConfig().getSpec() == SettingsConfig.COMMON_SPEC) {
+            SettingsConfig.bakeConfigCommon();
+        }
+    }
+
     private void setup(final FMLCommonSetupEvent event) {
         instance = this;
-        proxy = new CommonProxy();
+        //proxy = new CommonProxy();
 
-        SettingsConfig.loadConfig();
+        //SettingsConfig.loadConfig();
         //PacketDispatcher.registerPacketsCommon();
         //PacketDispatcher.registerPacketsServer();
         PacketDispatcher.registerPackets();
 
-        proxy.init();
+        //proxy.init();
 
 
-        if (!SettingsConfig.gameplay.itemNeeded)
+        if (!SettingsConfig.itemNeeded)
             MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
 
         MinecraftForge.EVENT_BUS.register(extBiomeData);
@@ -113,9 +131,8 @@ public class AntiqueAtlasMod {
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
-        ClientProxy clientProxy = new ClientProxy();
-        AntiqueAtlasMod.proxy = clientProxy;
-        clientProxy.initClient();
+        //AntiqueAtlasMod.proxy = new ClientProxy();
+        //clientProxy.initClient();
 
         // TODO FABRIC hack
         // run twice -> register client-side packets too
@@ -146,15 +163,18 @@ public class AntiqueAtlasMod {
 
     @SubscribeEvent
     public void connect(PlayerEvent.PlayerLoggedInEvent event) {
-        globalMarkersData.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
-        extBiomeData.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
-        PlayerEventHandler.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
+        boolean isRemote = !FMLEnvironment.dist.isDedicatedServer();
+        if (!isRemote) {
+            globalMarkersData.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
+            extBiomeData.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
+            PlayerEventHandler.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
+        }
     }
 
     @SubscribeEvent
     public void clientConnect(PlayerEvent.PlayerLoggedInEvent event) {
         //boolean isRemote = !Minecraft.getInstance().isIntegratedServerRunning();
-        boolean isRemote = FMLEnvironment.dist.isDedicatedServer();
+        boolean isRemote = !FMLEnvironment.dist.isDedicatedServer();
         atlasData.onClientConnectedToServer();
         markersData.onClientConnectedToServer();
         globalMarkersData.onClientConnectedToServer(isRemote);

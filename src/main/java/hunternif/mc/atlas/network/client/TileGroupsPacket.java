@@ -23,20 +23,10 @@ public class TileGroupsPacket {
 
     public static final int TILE_GROUPS_PER_PACKET = 100;
 
-    public TileGroupsPacket() {
-        tileGroups = new ArrayList<>();
-    }
-
     public TileGroupsPacket(ArrayList<TileGroup> tileGroups, int atlasID, DimensionType dimension) {
         this.tileGroups = tileGroups;
         this.atlasID = atlasID;
         this.dimension = dimension;
-    }
-
-    public TileGroupsPacket(int atlasID, DimensionType dimension, ArrayList<TileGroup> tileGroups) {
-        this.atlasID = atlasID;
-        this.dimension = dimension;
-        this.tileGroups = tileGroups;
     }
 
     public static TileGroupsPacket read(PacketBuffer buffer) {
@@ -49,7 +39,7 @@ public class TileGroupsPacket {
             newbie.readFromNBT(buffer.readCompoundTag());
             tileGroups.add(newbie);
         }
-        return new TileGroupsPacket(atlasID, dimensionId, tileGroups);
+        return new TileGroupsPacket(tileGroups, atlasID, dimensionId);
     }
 
     public static void write(TileGroupsPacket msg, PacketBuffer buffer) {

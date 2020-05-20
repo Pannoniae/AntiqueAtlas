@@ -212,10 +212,10 @@ public class MarkersData extends WorldSavedData {
 			for (Entry<DimensionType, DimensionMarkersData> e: dimensionMap.entrySet()){
 				totalMarkers += e.getValue().getAllMarkers().size();
 			}
-			if (totalMarkers < SettingsConfig.performance.markerLimit){
+			if (totalMarkers < SettingsConfig.markerLimit){
 				getMarkersDataInDimension(marker.getDimension()).insertMarker(marker);
 			} else {
-				Log.warn("Could not add new marker. Atlas is at it's limit of %d markers", SettingsConfig.performance.markerLimit);
+				Log.warn("Could not add new marker. Atlas is at it's limit of %d markers", SettingsConfig.markerLimit);
 			}
 		}
 		return marker;

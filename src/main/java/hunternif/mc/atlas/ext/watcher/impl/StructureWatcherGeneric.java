@@ -112,7 +112,7 @@ public class StructureWatcherGeneric implements IStructureWatcher {
 			}
 		}
 		
-		if (SettingsConfig.gameplay.autoVillageMarkers) {
+		if (SettingsConfig.autoVillageMarkers) {
 			if(!foundMarker)
 				AtlasAPI.markers.putGlobalMarker(world, false, MarkerRegistry.getId(marker).toString(), markerLabel, (chunkX << 4) + 8, (chunkZ << 4) + 8);
 			if(tileMarker != null && !foundTileMarker)

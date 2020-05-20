@@ -16,14 +16,14 @@ public class RegistrarAntiqueAtlas {
 
     public static void register() {
         // TODO FABRIC
-        // if (SettingsConfig.gameplay.itemNeeded) {
+        // if (SettingsConfig.itemNeeded) {
         //}
 
     }
     public static void registerSerializers() {
 
 
-        /* if (SettingsConfig.gameplay.itemNeeded) {
+        /* if (SettingsConfig.itemNeeded) {
             event.getRegistry().register(new ShapelessOreRecipe(new ResourceLocation(AntiqueAtlasMod.ID, "atlas"), new ItemStack(EMPTY_ATLAS), aud.XX_1_13_2_aS_XX, aud.XX_1_13_2_aX_XX).setRegistryName("atlas_blank"));
             event.getRegistry().register(new RecipeAtlasCloning().setRegistryName("atlas_clone"));
             event.getRegistry().register(new RecipeAtlasCombining().setRegistryName("atlas_combine"));

@@ -181,7 +181,7 @@ public class StructureWatcherVillage implements IStructureWatcher {
 						}
 					}
 				}
-				if (!foundMarker && SettingsConfig.gameplay.autoVillageMarkers) {
+				if (!foundMarker && SettingsConfig.autoVillageMarkers) {
 					AtlasAPI.markers.putGlobalMarker(world, false, MarkerRegistry.getId(villageType).toString(), "gui.antiqueatlas.marker.village", x, z);
 				}
 			}

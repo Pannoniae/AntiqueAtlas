@@ -1,6 +1,5 @@
 package kenkron.antiqueatlasoverlay;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hunternif.mc.atlas.AntiqueAtlasMod;
 import hunternif.mc.atlas.RegistrarAntiqueAtlas;
@@ -42,7 +41,7 @@ public class OverlayRenderer
      * there are none. Offhand gets priority.
      **/
     private static Integer getPlayerAtlas(PlayerEntity player) {
-        if (!SettingsConfig.gameplay.itemNeeded) {
+        if (!SettingsConfig.itemNeeded) {
             return player.getUniqueID().hashCode();
         }
 
