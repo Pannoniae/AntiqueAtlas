@@ -170,7 +170,9 @@ public class AntiqueAtlasMod {
 
     @SubscribeEvent
     public void recipeCrafted(PlayerEvent.ItemCraftedEvent event) {
-        onCrafted(event.getPlayer(), event.getPlayer().world, ((IRecipeHolder) (event.getInventory())).getRecipeUsed(), event.getCrafting(), event.getInventory());
+        if (event.getInventory() instanceof IRecipeHolder) {
+            onCrafted(event.getPlayer(), event.getPlayer().world, ((IRecipeHolder) (event.getInventory())).getRecipeUsed(), event.getCrafting(), event.getInventory());
+        }
     }
 
     @SubscribeEvent
