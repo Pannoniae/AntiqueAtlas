@@ -36,11 +36,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
 
 	private static GuiAtlas guiAtlas;
 
-	public void initClient() {
-		//TODO Enforce texture config loading process as follows:
-		// 1. pre-init: Antique Atlas defaults are loaded, config files are read.
-		// 2. init: mods set their custom textures. Those loaded from the config must not be overwritten!
-
+	public ClientProxy() {
 		textureSetMap = TextureSetMap.instance();
 		textureSetConfig = new TextureSetConfig(textureSetMap);
 		// Register default values before the config file loads, possibly overwriting the,:
@@ -88,16 +84,22 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
 		}
 
 		if (!SettingsConfig.gameplay.itemNeeded) {
-            KeyHandler.registerBindings();
+			KeyHandler.registerBindings();
 			//ClientTickCallback.EVENT.register(KeyHandler::onClientTick);
-        }
+		}
 
 		for (MarkerType type : MarkerRegistry.iterable()) {
 			type.initMips();
 		}
+	}
+
+	public void initClient() {
+		//TODO Enforce texture config loading process as follows:
+		// 1. pre-init: Antique Atlas defaults are loaded, config files are read.
+		// 2. init: mods set their custom textures. Those loaded from the config must not be overwritten!
 
 		// why mojang
-		Minecraft.getInstance().reloadResources();
+		//Minecraft.getInstance().reloadResources();
 
 	}
 
