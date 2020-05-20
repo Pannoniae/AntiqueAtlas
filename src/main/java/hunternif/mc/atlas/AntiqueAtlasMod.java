@@ -48,7 +48,6 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -90,6 +89,7 @@ public class AntiqueAtlasMod {
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(proxy);
     }
 
     @SubscribeEvent
@@ -167,14 +167,6 @@ public class AntiqueAtlasMod {
         globalMarkersData.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
         extBiomeData.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
         PlayerEventHandler.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
-    }
-
-    @SubscribeEvent
-    public void clientConnect(ClientPlayerNetworkEvent.LoggedInEvent event) {
-        boolean isRemote = !Minecraft.getInstance().isIntegratedServerRunning();
-        atlasData.onClientConnectedToServer();
-        markersData.onClientConnectedToServer();
-        globalMarkersData.onClientConnectedToServer(isRemote);
     }
 
     @SubscribeEvent

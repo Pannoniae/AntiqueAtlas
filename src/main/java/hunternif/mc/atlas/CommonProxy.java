@@ -5,18 +5,21 @@ import hunternif.mc.atlas.ext.ExtTileConfig;
 import hunternif.mc.atlas.ext.ExtTileIdMap;
 import hunternif.mc.atlas.util.Log;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.io.File;
 
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonProxy {
 	static File configDir;
 
 	private static ExtTileIdMap extTileIdMap;
 	private static ExtTileConfig extTileConfig;
 
-	public void init() {
+	public CommonProxy() {
 		configDir = new File("./config", "antiqueatlas");
 		configDir.mkdir();
 		extTileIdMap = ExtTileIdMap.instance();

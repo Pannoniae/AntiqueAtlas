@@ -15,6 +15,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
@@ -23,6 +27,7 @@ import java.util.function.Predicate;
 
 import static hunternif.mc.atlas.client.TextureSet.*;
 
+@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientProxy extends CommonProxy implements ISelectiveResourceReloadListener {
 	private static TextureSetMap textureSetMap;
 	private static TextureSetConfig textureSetConfig;
@@ -89,6 +94,14 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
 		for (MarkerType type : MarkerRegistry.iterable()) {
 			type.initMips();
 		}
+	}
+
+	@SubscribeEvent
+	public void clientConnect(ClientPlayerNetworkEvent.LoggedInEvent event) {
+		boolean isRemote = !Minecraft.getInstance().isIntegratedServerRunning();
+		AntiqueAtlasMod.atlasData.onClientConnectedToServer();
+		AntiqueAtlasMod.markersData.onClientConnectedToServer();
+		AntiqueAtlasMod.globalMarkersData.onClientConnectedToServer(isRemote);
 	}
 
 	public void initClient() {
