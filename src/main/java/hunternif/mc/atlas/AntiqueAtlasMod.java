@@ -29,6 +29,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
@@ -163,21 +164,34 @@ public class AntiqueAtlasMod {
 
     @SubscribeEvent
     public void connect(PlayerEvent.PlayerLoggedInEvent event) {
-        boolean isRemote = !FMLEnvironment.dist.isDedicatedServer();
-        if (!isRemote) {
-            globalMarkersData.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
-            extBiomeData.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
-            PlayerEventHandler.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
-        }
+        globalMarkersData.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
+        extBiomeData.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
+        PlayerEventHandler.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
     }
 
     @SubscribeEvent
-    public void clientConnect(PlayerEvent.PlayerLoggedInEvent event) {
-        //boolean isRemote = !Minecraft.getInstance().isIntegratedServerRunning();
-        boolean isRemote = !FMLEnvironment.dist.isDedicatedServer();
+    public void clientConnect(ClientPlayerNetworkEvent.LoggedInEvent event) {
+        boolean isRemote = !Minecraft.getInstance().isIntegratedServerRunning();
         atlasData.onClientConnectedToServer();
         markersData.onClientConnectedToServer();
         globalMarkersData.onClientConnectedToServer(isRemote);
+    }
+
+    @SubscribeEvent
+    public void playerTick(TickEvent.PlayerTickEvent event) {
+        PlayerEventHandler.onPlayerTick(event.player);
+    }
+
+    @SubscribeEvent
+    public void clientTick(TickEvent.ClientTickEvent event) {
+        KeyHandler.onClientTick();
+    }
+
+    @SubscribeEvent
+    public void playerDeath(LivingDeathEvent event) {
+        if (event.getEntityLiving() instanceof PlayerEntity) {
+            DeathWatcher.onPlayerDeath((PlayerEntity) event.getEntityLiving());
+        }
     }
 
     @SubscribeEvent
@@ -192,28 +206,6 @@ public class AntiqueAtlasMod {
     public void recipeCrafted(PlayerEvent.ItemCraftedEvent event) {
         if (event.getInventory() instanceof IRecipeHolder) {
             onCrafted(event.getPlayer(), event.getPlayer().world, ((IRecipeHolder) (event.getInventory())).getRecipeUsed(), event.getCrafting(), event.getInventory());
-        }
-    }
-
-    @SubscribeEvent
-    public void playerTick(TickEvent.PlayerTickEvent event) {
-        PlayerEventHandler.onPlayerTick(event.player);
-    }
-
-    @SubscribeEvent
-    public void playerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        //PlayerEventHandler.onPlayerLogin((ServerPlayerEntity) event.getPlayer());
-    }
-
-    @SubscribeEvent
-    public void clientTick(TickEvent.ClientTickEvent event) {
-        KeyHandler.onClientTick();
-    }
-
-    @SubscribeEvent
-    public void playerDeath(LivingDeathEvent event) {
-        if (event.getEntityLiving() instanceof PlayerEntity) {
-            DeathWatcher.onPlayerDeath((PlayerEntity) event.getEntityLiving());
         }
     }
 

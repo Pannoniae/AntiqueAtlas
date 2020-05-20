@@ -84,6 +84,7 @@ public class PacketDispatcher {
         INSTANCE.registerMessage(id++, DimensionUpdatePacket.class, DimensionUpdatePacket::write, DimensionUpdatePacket::read, DimensionUpdatePacket::process);
         INSTANCE.registerMessage(id++, MapDataPacket.class, MapDataPacket::write, MapDataPacket::read, MapDataPacket::process);
         INSTANCE.registerMessage(id++, MarkersPacket.class, MarkersPacket::write, MarkersPacket::read, MarkersPacket::process);
+        INSTANCE.registerMessage(id++, TileGroupsPacket.class, TileGroupsPacket::write, TileGroupsPacket::read, TileGroupsPacket::process);
         INSTANCE.registerMessage(id++, TileNameIDPacket.class, TileNameIDPacket::write, TileNameIDPacket::read, TileNameIDPacket::process);
         INSTANCE.registerMessage(id++, TilesPacket.class, TilesPacket::write, TilesPacket::read, TilesPacket::process);
     }
