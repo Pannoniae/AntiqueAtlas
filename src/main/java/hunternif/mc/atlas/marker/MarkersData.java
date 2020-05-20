@@ -5,15 +5,17 @@ import hunternif.mc.atlas.api.MarkerAPI;
 import hunternif.mc.atlas.network.PacketDispatcher;
 import hunternif.mc.atlas.network.client.MarkersPacket;
 import hunternif.mc.atlas.util.Log;
-import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.PersistentState;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.storage.WorldSavedData;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.network.PacketDistributor;
+
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * </p>
  * @author Hunternif
  */
-public class MarkersData extends PersistentState {
+public class MarkersData extends WorldSavedData {
 	private static final int VERSION = 3;
 	private static final String TAG_VERSION = "aaVersion";
 	private static final String TAG_DIMENSION_MAP_LIST = "dimMap";
@@ -72,26 +74,25 @@ public class MarkersData extends PersistentState {
 		super(key);
 	}
 
-
 	@Override
-	public void fromTag(CompoundTag compound) {
-		int version = compound.getInt(TAG_VERSION);
+	public void read(CompoundNBT nbt) {
+		int version = nbt.getInt(TAG_VERSION);
 		if (version < VERSION) {
 			Log.warn("Outdated atlas data format! Was %d but current is %d", version, VERSION);
 			this.markDirty();
 		}
-		ListTag dimensionMapList = compound.getList(TAG_DIMENSION_MAP_LIST, NbtType.COMPOUND);
+		ListNBT dimensionMapList = nbt.getList(TAG_DIMENSION_MAP_LIST, Constants.NBT.TAG_COMPOUND);
 		for (int d = 0; d < dimensionMapList.size(); d++) {
-			CompoundTag tag = dimensionMapList.getCompound(d);
+			CompoundNBT tag = dimensionMapList.getCompound(d);
 			DimensionType dimensionID;
-			if (tag.contains(TAG_DIMENSION_ID, NbtType.NUMBER)) {
-				dimensionID = Registry.DIMENSION.get(tag.getInt(TAG_DIMENSION_ID));
+			if (tag.contains(TAG_DIMENSION_ID, Constants.NBT.TAG_ANY_NUMERIC)) {
+				dimensionID = Registry.DIMENSION_TYPE.getByValue(tag.getInt(TAG_DIMENSION_ID));
 			} else {
-				dimensionID = Registry.DIMENSION.get(new Identifier(tag.getString(TAG_DIMENSION_ID)));
+				dimensionID = Registry.DIMENSION_TYPE.getOrDefault(new ResourceLocation(tag.getString(TAG_DIMENSION_ID)));
 			}
-			ListTag tagList = tag.getList(TAG_MARKERS, NbtType.COMPOUND);
+			ListNBT tagList = tag.getList(TAG_MARKERS, Constants.NBT.TAG_COMPOUND);
 			for (int i = 0; i < tagList.size(); i++) {
-				CompoundTag markerTag = tagList.getCompound(i);
+				CompoundNBT markerTag = tagList.getCompound(i);
 				boolean visibleAhead = true;
 				if (version < 2) {
 					Log.warn("Marker is visible ahead by default");
@@ -112,7 +113,7 @@ public class MarkersData extends PersistentState {
 				if (largestID.intValue() < id) {
 					largestID.set(id);
 				}
-				
+
 				Marker marker = new Marker(
 						id,
 						markerTag.getString(TAG_MARKER_TYPE),
@@ -127,17 +128,17 @@ public class MarkersData extends PersistentState {
 	}
 
 	@Override
-	public CompoundTag toTag(CompoundTag compound) {
+	public CompoundNBT write(CompoundNBT compound) {
 		Log.info("Saving local markers data to NBT");
 		compound.putInt(TAG_VERSION, VERSION);
-		ListTag dimensionMapList = new ListTag();
+		ListNBT dimensionMapList = new ListNBT();
 		for (DimensionType dimension : dimensionMap.keySet()) {
-			CompoundTag tag = new CompoundTag();
-			tag.putString(TAG_DIMENSION_ID, Registry.DIMENSION.getId(dimension).toString());
+			CompoundNBT tag = new CompoundNBT();
+			tag.putString(TAG_DIMENSION_ID, Registry.DIMENSION_TYPE.getKey(dimension).toString());
 			DimensionMarkersData data = getMarkersDataInDimension(dimension);
-			ListTag tagList = new ListTag();
+			ListNBT tagList = new ListNBT();
 			for (Marker marker : data.getAllMarkers()) {
-				CompoundTag markerTag = new CompoundTag();
+				CompoundNBT markerTag = new CompoundNBT();
 				markerTag.putInt(TAG_MARKER_ID, marker.getId());
 				markerTag.putString(TAG_MARKER_TYPE, marker.getType());
 				markerTag.putString(TAG_MARKER_LABEL, marker.getLabel());
@@ -150,10 +151,10 @@ public class MarkersData extends PersistentState {
 			dimensionMapList.add(tag);
 		}
 		compound.put(TAG_DIMENSION_MAP_LIST, dimensionMapList);
-		
+
 		return compound;
 	}
-	
+
 	public Set<DimensionType> getVisitedDimensions() {
 		return dimensionMap.keySet();
 	}
@@ -233,7 +234,7 @@ public class MarkersData extends PersistentState {
 			for (Marker marker : data.getAllMarkers()) {
 				packet.putMarker(marker);
 			}
-			PacketDispatcher.sendTo(packet, (ServerPlayerEntity) player);
+			PacketDispatcher.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), packet);
 		}
 		Log.info("Sent markers data #%d to player %s", atlasID, player.getCommandSource().getName());
 		playersSentTo.add(player);

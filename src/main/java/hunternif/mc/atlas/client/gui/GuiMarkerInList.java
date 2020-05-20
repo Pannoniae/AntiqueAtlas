@@ -5,7 +5,7 @@ import hunternif.mc.atlas.client.Textures;
 import hunternif.mc.atlas.client.gui.core.GuiToggleButton;
 import hunternif.mc.atlas.registry.MarkerType;
 import hunternif.mc.atlas.util.AtlasRenderHelper;
-import net.minecraft.util.Identifier;
+import net.minecraft.util.ResourceLocation;
 
 
 public class GuiMarkerInList extends GuiToggleButton {
@@ -29,7 +29,7 @@ public class GuiMarkerInList extends GuiToggleButton {
 				isSelected() ? Textures.MARKER_FRAME_ON : Textures.MARKER_FRAME_OFF,
 				getGuiX(), getGuiY(), FRAME_SIZE, FRAME_SIZE);
 		
-		Identifier texture = markerType.getIcon();
+		ResourceLocation texture = markerType.getIcon();
 		if (texture != null) {
 			AtlasRenderHelper.drawFullTexture(texture, getGuiX() + 1, getGuiY() + 1, GuiAtlas.MARKER_SIZE, GuiAtlas.MARKER_SIZE);
 		}

@@ -3,7 +3,7 @@ package hunternif.mc.atlas.client.gui.core;
 import com.mojang.blaze3d.platform.GlStateManager;
 import hunternif.mc.atlas.util.AtlasRenderHelper;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 /** Displays a texture that changes alpha at regular intervals.
@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
  * @author Hunternif
  */
 public class GuiBlinkingImage extends GuiComponent {
-	private Identifier texture;
+	private ResourceLocation texture;
 	/** The number of milliseconds the icon spends visible or invisible. */
 	private long blinkTime = 500;
 	private float visibleAlpha = 1;
@@ -22,7 +22,7 @@ public class GuiBlinkingImage extends GuiComponent {
 	/** The flag that switches value every "blink". */
 	private boolean isVisible;
 	
-	public void setTexture(Identifier texture, int width, int height) {
+	public void setTexture(ResourceLocation texture, int width, int height) {
 		this.texture = texture;
 		setSize(width, height);
 		// Set up the timer so that the image appears visible at the first moment:
