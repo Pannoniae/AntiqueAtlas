@@ -62,8 +62,9 @@ public class MarkersPacket {
     }
 
     public static MarkersPacket read(PacketBuffer buffer) {
+        int atlasID = buffer.readVarInt();
         DimensionType dimension = Registry.DIMENSION_TYPE.getByValue(buffer.readVarInt());
-        MarkersPacket packet = new MarkersPacket(buffer.readVarInt(), dimension);
+        MarkersPacket packet = new MarkersPacket(atlasID, dimension);
         int typesLength = buffer.readVarInt();
         for (int i = 0; i < typesLength; i++) {
             String type = buffer.readString(512);
