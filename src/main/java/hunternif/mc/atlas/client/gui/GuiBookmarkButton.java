@@ -1,11 +1,11 @@
 package hunternif.mc.atlas.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hunternif.mc.atlas.client.Textures;
 import hunternif.mc.atlas.client.gui.core.GuiToggleButton;
 import hunternif.mc.atlas.util.AtlasRenderHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -55,6 +55,7 @@ public class GuiBookmarkButton extends GuiToggleButton {
 	public void render(int mouseX, int mouseY, float partialTick) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		//GuiLighting.disable();
+		RenderHelper.disableStandardItemLighting();
 
 		// Render background:
 		int u = colorIndex * WIDTH;

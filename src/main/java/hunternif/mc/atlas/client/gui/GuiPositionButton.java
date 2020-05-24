@@ -1,11 +1,11 @@
 package hunternif.mc.atlas.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hunternif.mc.atlas.client.Textures;
 import hunternif.mc.atlas.client.gui.core.GuiComponentButton;
 import hunternif.mc.atlas.util.AtlasRenderHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 
@@ -23,6 +23,7 @@ public class GuiPositionButton extends GuiComponentButton {
 	public void render(int mouseX, int mouseY, float partialTick) {
 		if (isEnabled()) {
 			//GuiLighting.disable();
+			RenderHelper.disableStandardItemLighting();
 			RenderSystem.enableBlend();
 			RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
