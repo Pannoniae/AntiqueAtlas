@@ -1,6 +1,5 @@
 package hunternif.mc.atlas.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hunternif.mc.atlas.client.Textures;
 import hunternif.mc.atlas.client.gui.core.GuiComponentButton;

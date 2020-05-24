@@ -11,7 +11,6 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.io.File;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonProxy {
 	static File configDir;
 
